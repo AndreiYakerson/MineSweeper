@@ -1,0 +1,20 @@
+body {
+    text-align: center;
+}
+
+table {
+    border: solid;
+    margin: auto;
+}
+
+td {
+    width: 20px;
+    height: 20px;
+    border: solid;
+    border-color: lightgray;
+}
+
+.covered {
+    border: solid;
+    background-color: lightgrey;
+}
