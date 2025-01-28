@@ -12,6 +12,15 @@ function createEmptyBoard(size) {
     }
     return board
 }
+function isLoose(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            const currCell = board[i][j]
+            if (!currCell.isCovered && currCell.isMine) return true
+        }
+    }
+    return false
+}
 
 function placeMines() {
     for (var i = 0; i < gLevel.mines; i++) {

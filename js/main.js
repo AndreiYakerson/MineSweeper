@@ -5,14 +5,21 @@ const BOOM = '💥'
 const FLAG = '⛳️'
 const EMPTY = ' '
 
+const LOOSE_SMILEY = '😵'
+const ALIVE_SMILEY = '😁'
+
 var gLevel
 var gGame
 var gBoard
+var gSmiley
 
 function onInitGame() {
+    gSmiley = document.querySelector('.smiley')
+    gSmiley.innerHTML = ALIVE_SMILEY
+
     gLevel = {
-        size: 4,
-        mines: 1
+        size: 8,
+        mines: 14
     }
 
     gGame = {
@@ -20,7 +27,8 @@ function onInitGame() {
         coveredCount: 0,
         markedCount: 0,
         secsPassed: 0,
-        firstCell: false
+        firstCell: false,
+        isGameOver: false
     }
 
     gBoard = createEmptyBoard(gLevel.size)
@@ -61,7 +69,10 @@ function renderBoard(board) {
         strHTML += `<tr>`
 
         for (var j = 0; j < board.length; j++) {
-            strHTML += `<td data-location="${i},${j}" class="covered" oncontextmenu="onCellMarked(this)" onclick="onClickCell(this)"></td>`
+            strHTML += `<td data-location="${i},${j}"
+             class="covered"
+              oncontextmenu="onCellMarked(this,event)"
+                 onclick="onClickCell(this)"></td>`
         }
         strHTML += `</tr>`
     }
@@ -71,17 +82,15 @@ function renderBoard(board) {
 }
 
 function onClickCell(elCell) {
+    if (gGame.isGameOver) return
+
+    gGame.isOn = true
     const cellLocation = getLocationFromData(elCell.dataset.location)
 
     if (!gGame.firstCell) {
         gGame.firstCell = { i: cellLocation.i, j: cellLocation.j }
-    }
-
-    if (!gGame.isOn) {
         setBoardElements(gLevel.size)
-        gGame.isOn = true
     }
-
 
     const currCell = gBoard[cellLocation.i][cellLocation.j]
     // console.log(gBoard);
@@ -94,10 +103,23 @@ function onClickCell(elCell) {
         if (currCell.minesAroundCount === 0) elCell.innerHTML = EMPTY
         else elCell.innerHTML = gBoard[cellLocation.i][cellLocation.j].minesAroundCount
     }
-    if (currCell.isMine && !currCell.isMarked) elCell.innerHTML = BOOM
+
+    if (currCell.isMine && !currCell.isMarked) {
+        const elSmiley = document.querySelector('.smiley')
+
+        elSmiley.innerHTML = LOOSE_SMILEY
+        elCell.innerHTML = BOOM
+        elCell.classList.add('boom')
+    }
+
+    checkGameOver()
 }
 
-function onCellMarked(elCell) {
+function onCellMarked(elCell, ev) {
+    ev.preventDefault()
+
+    if (gGame.isGameOver) return
+
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
@@ -110,4 +132,14 @@ function onCellMarked(elCell) {
     }
 
     // console.log(gBoard);
+
+}
+
+
+function checkGameOver() {
+
+
+    if (isLoose(gBoard)) {
+        gGame.isGameOver = true
+    }
 }
