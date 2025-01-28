@@ -70,9 +70,37 @@ function getNegsMinesCount(cellI, cellJ) { //0,0
     return minesCount
 }
 
+function isWin(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            const currCell = board[i][j]
+
+            if (currCell.isCovered && !currCell.isMine && !currCell.isMarked) return false
+            if (currCell.isMine && !currCell.isMarked) return false
+        }
+    }
+    return true
+}
+
 function getLocationFromData(str) {
     var arr = str.split(',')
     return { i: +arr[0], j: +arr[1] }
+}
+
+function showAllMines(board) {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+
+            const currCell = board[i][j]
+            if (currCell.isMine) {
+                currCell.isCovered = false
+
+                const currElement = document.getElementById(`${i},${j}`)
+                currElement.classList.remove('covered')
+                currElement.innerHTML = MINE
+            } 
+        }
+    }
 }
 
 function getRandomInt(min, max) {

@@ -2,25 +2,26 @@
 
 const MINE = '💣'
 const BOOM = '💥'
-const FLAG = '⛳️'
+const FLAG = '🚩'
 const EMPTY = ' '
 
 const LOOSE_SMILEY = '😵'
 const ALIVE_SMILEY = '😁'
+const WIN_SMILEY = '😎'
 
-var gLevel
 var gGame
 var gBoard
 var gSmiley
+
+var gLevel = {
+    size: 4,
+    mines: 2
+}
 
 function onInitGame() {
     gSmiley = document.querySelector('.smiley')
     gSmiley.innerHTML = ALIVE_SMILEY
 
-    gLevel = {
-        size: 8,
-        mines: 14
-    }
 
     gGame = {
         isOn: false,
@@ -28,11 +29,11 @@ function onInitGame() {
         markedCount: 0,
         secsPassed: 0,
         firstCell: false,
-        isGameOver: false
+        isGameOver: false,
     }
 
     gBoard = createEmptyBoard(gLevel.size)
-    console.log(gBoard);
+    // console.log(gBoard);
 
     renderBoard(gBoard)
 }
@@ -69,7 +70,7 @@ function renderBoard(board) {
         strHTML += `<tr>`
 
         for (var j = 0; j < board.length; j++) {
-            strHTML += `<td data-location="${i},${j}"
+            strHTML += `<td id="${i},${j}" data-location="${i},${j}"
              class="covered"
               oncontextmenu="onCellMarked(this,event)"
                  onclick="onClickCell(this)"></td>`
@@ -108,7 +109,6 @@ function onClickCell(elCell) {
         const elSmiley = document.querySelector('.smiley')
 
         elSmiley.innerHTML = LOOSE_SMILEY
-        elCell.innerHTML = BOOM
         elCell.classList.add('boom')
     }
 
@@ -130,16 +130,38 @@ function onCellMarked(elCell, ev) {
         gBoard[cellLocation.i][cellLocation.j].isMarked = false
         elCell.innerHTML = EMPTY
     }
-
+    checkGameOver()
     // console.log(gBoard);
-
 }
 
 
 function checkGameOver() {
 
-
     if (isLoose(gBoard)) {
         gGame.isGameOver = true
+        showAllMines(gBoard)
+
+    } else if (isWin(gBoard)) {
+        gGame.isGameOver = true
+        gSmiley = document.querySelector('.smiley')
+        gSmiley.innerHTML = WIN_SMILEY
     }
+}
+
+function onSetBeginner() {
+    gLevel.size = 4
+    gLevel.mines = 2
+    onInitGame()
+}
+
+function onSetMedium() {
+    gLevel.size = 8
+    gLevel.mines = 14
+    onInitGame()
+}
+
+function onSetExpert() {
+    gLevel.size = 12
+    gLevel.mines = 32
+    onInitGame()
 }

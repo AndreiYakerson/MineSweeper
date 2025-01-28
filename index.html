@@ -10,10 +10,15 @@
 
 <body onload="onInitGame()">
     <h1>Minesweeper</h1>
+    <div class="levels">
+        <button class="btn" onclick="onSetBeginner(this)">Beginner</button>
+        <button class="btn" onclick="onSetMedium(this)">Medium</button>
+        <button class="btn" onclick="onSetExpert(this)">Expert</button>
+    </div>
     <div class="smiley" onclick="onInitGame()"></div>
 
     <table>
-        <tbody class="board">
+        <tbody  class="board">
 
             
         </tbody>

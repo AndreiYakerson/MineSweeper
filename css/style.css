@@ -25,11 +25,15 @@ td {
     height: 40px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 30px;
     border: solid;
 }
 
 .boom {
     background-color: rgb(249, 37, 37);
+}
+
+.levels {
+    margin-bottom: 10px;
 }
