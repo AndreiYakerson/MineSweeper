@@ -111,7 +111,7 @@ function onClickCell(elCell) {
         elSmiley.innerHTML = LOOSE_SMILEY
         elCell.classList.add('boom')
     }
-
+    expandUncover(gBoard,cellLocation.i, cellLocation.j)
     checkGameOver()
 }
 
@@ -130,10 +130,44 @@ function onCellMarked(elCell, ev) {
         gBoard[cellLocation.i][cellLocation.j].isMarked = false
         elCell.innerHTML = EMPTY
     }
+
+
     checkGameOver()
     // console.log(gBoard);
 }
 
+
+
+function expandUncover(board, cellI, cellJ) {
+
+    if (gBoard[cellI][cellJ].minesAroundCount !== 0) return
+
+
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            const currCell = board[i][j]
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= gBoard[i].length) continue
+
+            var elCurrCell = document.getElementById(`${i},${j}`)
+
+            if (currCell.isCovered && !currCell.isMine) {
+
+                currCell.isCovered = false
+                elCurrCell.classList.remove('covered')
+
+                if (currCell.minesAroundCount === 0) {
+                    elCurrCell.innerHTML = EMPTY
+                } else {
+                    elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
+                }
+
+            }
+
+        }
+    }
+}
 
 function checkGameOver() {
 
@@ -147,7 +181,6 @@ function checkGameOver() {
         gSmiley.innerHTML = WIN_SMILEY
     }
 }
-
 function onSetBeginner() {
     gLevel.size = 4
     gLevel.mines = 2
@@ -165,3 +198,4 @@ function onSetExpert() {
     gLevel.mines = 32
     onInitGame()
 }
+
