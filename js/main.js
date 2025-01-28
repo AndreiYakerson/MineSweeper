@@ -117,8 +117,10 @@ function onClickCell(elCell) {
 
 function onCellMarked(elCell, ev) {
     ev.preventDefault()
-
+    if (!gGame.isOn) return
     if (gGame.isGameOver) return
+    
+    
 
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
