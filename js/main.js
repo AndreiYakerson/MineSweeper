@@ -19,9 +19,6 @@ var gLevel = {
 }
 
 function onInitGame() {
-    gSmiley = document.querySelector('.smiley')
-    gSmiley.innerHTML = ALIVE_SMILEY
-
 
     gGame = {
         isOn: false,
@@ -30,12 +27,15 @@ function onInitGame() {
         secsPassed: 0,
         firstCell: false,
         isGameOver: false,
+        minesCount: gLevel.mines
     }
 
     gBoard = createEmptyBoard(gLevel.size)
     // console.log(gBoard);
 
+    renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
+    renderMinesCount(gLevel.mines)
 }
 
 function setBoardElements(size) {
@@ -106,27 +106,31 @@ function onClickCell(elCell) {
     }
 
     if (currCell.isMine && !currCell.isMarked) {
-        const elSmiley = document.querySelector('.smiley')
-
-        elSmiley.innerHTML = LOOSE_SMILEY
+        renderSmiley(LOOSE_SMILEY)
         elCell.classList.add('boom')
     }
-    expandUncover(gBoard,cellLocation.i, cellLocation.j)
+    expandUncover(gBoard, cellLocation.i, cellLocation.j)
     checkGameOver()
 }
 
 function onCellMarked(elCell, ev) {
     ev.preventDefault()
+
     if (!gGame.isOn) return
     if (gGame.isGameOver) return
-    
-    
+
 
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
     if (!currCell.isMarked && currCell.isCovered) {
         gBoard[cellLocation.i][cellLocation.j].isMarked = true
+
+        if (gGame.minesCount !== 0) {
+            gGame.minesCount--
+            renderMinesCount(gGame.minesCount)
+        }
+
         elCell.innerHTML = FLAG
     } else {
         gBoard[cellLocation.i][cellLocation.j].isMarked = false
@@ -141,7 +145,7 @@ function onCellMarked(elCell, ev) {
 
 
 function expandUncover(board, cellI, cellJ) {
-    
+
     if (gBoard[cellI][cellJ].minesAroundCount !== 0) return
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
@@ -180,8 +184,7 @@ function checkGameOver() {
 
     } else if (isWin(gBoard)) {
         gGame.isGameOver = true
-        gSmiley = document.querySelector('.smiley')
-        gSmiley.innerHTML = WIN_SMILEY
+        renderSmiley(WIN_SMILEY)
     }
 }
 function onSetBeginner() {
@@ -202,3 +205,7 @@ function onSetExpert() {
     onInitGame()
 }
 
+function renderSmiley(smiley) {
+    gSmiley = document.querySelector('.smiley')
+    gSmiley.innerHTML = smiley
+}

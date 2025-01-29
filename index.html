@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +10,35 @@
 
 
 <body onload="onInitGame()">
-    <h1>Minesweeper</h1>
-    <div class="levels">
-        <button class="btn" onclick="onSetBeginner(this)">Beginner</button>
-        <button class="btn" onclick="onSetMedium(this)">Medium</button>
-        <button class="btn" onclick="onSetExpert(this)">Expert</button>
-    </div>
-    <div class="smiley" onclick="onInitGame()"></div>
-
-    <table>
-        <tbody  class="board">
-
-            
-        </tbody>
-    </table>
     
+    <div class="header">
+        <h1>Minesweeper</h1>
+
+        <div class="levels">
+            <button class="btn" onclick="onSetBeginner(this)">Beginner</button>
+            <button class="btn" onclick="onSetMedium(this)">Medium</button>
+            <button class="btn" onclick="onSetExpert(this)">Expert</button>
+        </div>
+
+        
+        
+        <div class="counts-conteiner">
+            <p class="counts mines">Mines: <span></span></p>
+            <div class="smiley" onclick="onInitGame()"></div>
+            <p class="counts seconds">Seconds: <span>000</span></p>
+        </div>
+        
+        
+        <table>
+            <tbody class="board"> 
+            </tbody>
+        </table>
+    </div>
+
     <h2>Andrei Yakerson</h2>
 
     <script src="js/main.js"></script>
     <script src="js/utils.js"></script>
 </body>
+
 </html>

@@ -103,6 +103,11 @@ function showAllMines(board) {
     }
 }
 
+function renderMinesCount(num) {
+    const elMinesCount = document.querySelector('.mines span')
+    elMinesCount.innerHTML = num
+}
+
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);

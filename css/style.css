@@ -1,39 +1,126 @@
 body {
     text-align: center;
+    background-color: rgb(55, 182, 228)
+}
+
+h1 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.header {
+    background-color: bisque;
+    padding: 5px;
+    width: 600px;
+    height: 610px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: solid;
 }
 
 table {
     border: solid;
     margin: auto;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 td {
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     border: solid;
-    border-color: lightgray;
+    border-color: black;
+    border-radius: 5px;
+    color: blue;
+
+}
+
+.covered:hover {
+    scale: 1.2;
+    transition: 0.3s;
+}
+
+td:not(hover) {
+    transition: 0.3s;
 }
 
 .covered {
     border: solid;
-    background-color: lightgrey;
+    border-color: black;
+    background-color: yellow;
 }
 
 .smiley {
-    background-color: lightgrey;
+    background-color: lightgreen;
     width: 40px;
     height: 40px;
-    margin-left: auto;
-    margin-right: auto;
     margin-bottom: 10px;
     font-size: 30px;
     border: solid;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .boom {
-    background-color: rgb(249, 37, 37);
+    background-color: rgb(255, 0, 0);
 }
 
 .levels {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.btn {
+    padding: 5px;
+    background-color: lightgreen;
+    border-radius: 10px;
+    border-color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.btn:hover {
+    scale: 1.1;
+    transition: 0.5s;
+    cursor: pointer;
+    background-color: beige;
+}
+
+.btn:not(hover) {
+    transition: 0.5s;
+}
+
+.smiley:hover {
+    scale: 1.1;
+    border-radius: 50%;
+    background-color: beige;
+    transition: 0.5s;
+}
+
+.smiley:not(hove) {
+    transition: 0.5s;
+}
+
+.counts {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: beige;
+    width: 120px;
+    height: 20px;
+    border: solid;
+    border-radius: 10px;
+    background-color: lightgreen;
+
+}
+
+.counts:hover {
+    cursor: default;
+}
+
+.counts-conteiner {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+
 }
