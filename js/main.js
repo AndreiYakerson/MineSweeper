@@ -141,16 +141,16 @@ function onCellMarked(elCell, ev) {
 
 
 function expandUncover(board, cellI, cellJ) {
-
+    
     if (gBoard[cellI][cellJ].minesAroundCount !== 0) return
-
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            const currCell = board[i][j]
             if (i === cellI && j === cellJ) continue
             if (j < 0 || j >= gBoard[i].length) continue
+
+            const currCell = board[i][j]
 
             var elCurrCell = document.getElementById(`${i},${j}`)
 
@@ -161,6 +161,7 @@ function expandUncover(board, cellI, cellJ) {
 
                 if (currCell.minesAroundCount === 0) {
                     elCurrCell.innerHTML = EMPTY
+                    expandUncover(board, i, j)
                 } else {
                     elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
                 }
