@@ -117,6 +117,7 @@ function onClickCell(elCell) {
             
             elCell.classList.remove('covered')
             elCell.innerHTML = MINE
+            gGame.isGameOver = true
             
             
             setTimeout(() => {
@@ -124,6 +125,7 @@ function onClickCell(elCell) {
                 elCell.classList.add('covered')
                 elCell.innerHTML = EMPTY
                 renderLives(gGame.livesCount)
+                gGame.isGameOver = false
             }, 1000)
 
             return
