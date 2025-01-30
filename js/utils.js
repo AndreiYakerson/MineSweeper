@@ -12,6 +12,7 @@ function createEmptyBoard(size) {
     }
     return board
 }
+
 function isLoose(board) {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
@@ -27,7 +28,7 @@ function placeMines() {
         const idxs = getAllEmptyIdxs(gBoard)
         const randomNum = getRandomInt(0, idxs.length)
         const randomIdx = idxs[randomNum]
-        
+
         gBoard[randomIdx.i][randomIdx.j].isMine = true
     }
 }
@@ -63,7 +64,7 @@ function getNegsMinesCount(cellI, cellJ) { //0,0
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
             if (i === cellI && j === cellJ) continue
             if (j < 0 || j >= gBoard[i].length) continue
-            
+
             if (gBoard[i][j].isMine === true) minesCount++
         }
     }
@@ -98,7 +99,7 @@ function showAllMines(board) {
                 const currElement = document.getElementById(`${i},${j}`)
                 currElement.classList.remove('covered')
                 currElement.innerHTML = MINE
-            } 
+            }
         }
     }
 }
@@ -129,12 +130,29 @@ function onSetExpert() {
 function renderTime() {
     const secDiff = Math.floor((Date.now() - gStartTime) / 1000)
     const elSeconds = document.querySelector('.seconds span')
-    elSeconds.innerHTML = secDiff    
+    elSeconds.innerHTML = secDiff
 }
 
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
-  }
-  
+}
+
+function renderSmiley(smiley) {
+    gSmiley = document.querySelector('.smiley')
+    gSmiley.innerHTML = smiley
+}
+
+function renderLives(count, heart) {
+    const elLive = document.querySelector('.lives')
+    elLive.innerHTML = heart.repeat(count)
+    return heart.repeat(count)
+}
+
+function resetTimer() {
+    gIntervalTimer = 0
+    gStartTime = 0
+    const elSeconds = document.querySelector('.seconds span')
+    elSeconds.innerHTML = 0
+}

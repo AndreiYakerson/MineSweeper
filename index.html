@@ -11,7 +11,7 @@
 
 <body onload="onInitGame()">
     
-    <div class="header">
+    <div class="game">
         <h1>Minesweeper</h1>
 
         <div class="levels">
@@ -19,19 +19,21 @@
             <button class="btn" onclick="onSetMedium(this)">Medium</button>
             <button class="btn" onclick="onSetExpert(this)">Expert</button>
         </div>
-
         
-        
-        <div class="counts-conteiner">
+        <div class="counts-container">
             <p class="counts mines">Mines: <span></span></p>
             <div class="smiley" onclick="onInitGame()"></div>
             <p class="counts seconds">Seconds: <span></span></p>
         </div>
 
-        <div>
+        <div class="lives-container">
             <p class="lives"></p>
+            <div class="bulbs">
+                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
+                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
+                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
+            </div>
         </div>
-        
         
         <table>
             <tbody class="board"> 
