@@ -3,6 +3,8 @@
 const MINE = '💣'
 const BOOM = '💥'
 const FLAG = '🚩'
+const LIVE = '💙'
+const LIVE_BREAK = '💔'
 const EMPTY = ' '
 
 const LOOSE_SMILEY = '😵'
@@ -27,12 +29,14 @@ function onInitGame() {
         secsPassed: 0,
         firstCell: false,
         isGameOver: false,
-        minesCount: gLevel.mines
+        minesCount: gLevel.mines,
+        livesCount: 3
     }
 
     gBoard = createEmptyBoard(gLevel.size)
     // console.log(gBoard);
 
+    renderLives(gGame.livesCount)
     renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
@@ -86,6 +90,7 @@ function onClickCell(elCell) {
     if (gGame.isGameOver) return
 
     gGame.isOn = true
+
     const cellLocation = getLocationFromData(elCell.dataset.location)
 
     if (!gGame.firstCell) {
@@ -106,8 +111,28 @@ function onClickCell(elCell) {
     }
 
     if (currCell.isMine && !currCell.isMarked) {
-        renderSmiley(LOOSE_SMILEY)
-        elCell.classList.add('boom')
+        if (gGame.livesCount > 1) {
+
+            gGame.livesCount--
+            
+            elCell.classList.remove('covered')
+            elCell.innerHTML = MINE
+            
+            
+            setTimeout(() => {
+                currCell.isCovered = true
+                elCell.classList.add('covered')
+                elCell.innerHTML = EMPTY
+                renderLives(gGame.livesCount)
+            }, 1000)
+
+            return
+
+        } else {
+            renderSmiley(LOOSE_SMILEY)
+            elCell.classList.add('boom')
+        }
+
     }
     expandUncover(gBoard, cellLocation.i, cellLocation.j)
     checkGameOver()
@@ -181,6 +206,7 @@ function checkGameOver() {
     if (isLoose(gBoard)) {
         gGame.isGameOver = true
         showAllMines(gBoard)
+        renderLives(0)
 
     } else if (isWin(gBoard)) {
         gGame.isGameOver = true
@@ -208,4 +234,10 @@ function onSetExpert() {
 function renderSmiley(smiley) {
     gSmiley = document.querySelector('.smiley')
     gSmiley.innerHTML = smiley
+}
+
+function renderLives(count) {
+    const elLive = document.querySelector('.lives')
+    elLive.innerHTML = LIVE.repeat(count)
+    return LIVE.repeat(count)
 }
