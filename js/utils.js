@@ -108,6 +108,30 @@ function renderMinesCount(num) {
     elMinesCount.innerHTML = num
 }
 
+function onSetBeginner() {
+    gLevel.size = 4
+    gLevel.mines = 2
+    onInitGame()
+}
+
+function onSetMedium() {
+    gLevel.size = 8
+    gLevel.mines = 14
+    onInitGame()
+}
+
+function onSetExpert() {
+    gLevel.size = 12
+    gLevel.mines = 32
+    onInitGame()
+}
+
+function renderTime() {
+    const secDiff = Math.floor((Date.now() - gStartTime) / 1000)
+    const elSeconds = document.querySelector('.seconds span')
+    elSeconds.innerHTML = secDiff    
+}
+
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);

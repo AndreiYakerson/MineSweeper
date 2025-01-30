@@ -14,13 +14,17 @@ const WIN_SMILEY = '😎'
 var gGame
 var gBoard
 var gSmiley
+var gIntervalTimer
+var gStartTime
 
 var gLevel = {
     size: 4,
-    mines: 2
+    mines: 2,
 }
 
 function onInitGame() {
+    clearInterval(gIntervalTimer)
+    resetTimer()
 
     gGame = {
         isOn: false,
@@ -30,13 +34,13 @@ function onInitGame() {
         firstCell: false,
         isGameOver: false,
         minesCount: gLevel.mines,
-        livesCount: 3
+        livesCount: 3,
     }
 
     gBoard = createEmptyBoard(gLevel.size)
     // console.log(gBoard);
 
-    renderLives(gGame.livesCount)
+    renderLives(gGame.livesCount, LIVE)
     renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
@@ -89,7 +93,14 @@ function renderBoard(board) {
 function onClickCell(elCell) {
     if (gGame.isGameOver) return
 
+    if (!gGame.isOn) {
+        gStartTime = Date.now()
+        gIntervalTimer = setInterval(renderTime, 100)
+
+    }
+
     gGame.isOn = true
+
 
     const cellLocation = getLocationFromData(elCell.dataset.location)
 
@@ -114,17 +125,18 @@ function onClickCell(elCell) {
         if (gGame.livesCount > 1) {
 
             gGame.livesCount--
-            
+
             elCell.classList.remove('covered')
             elCell.innerHTML = MINE
             gGame.isGameOver = true
-            
-            
+
+
             setTimeout(() => {
                 currCell.isCovered = true
                 elCell.classList.add('covered')
                 elCell.innerHTML = EMPTY
-                renderLives(gGame.livesCount)
+
+                renderLives(gGame.livesCount, LIVE)
                 gGame.isGameOver = false
             }, 1000)
 
@@ -133,6 +145,7 @@ function onClickCell(elCell) {
         } else {
             renderSmiley(LOOSE_SMILEY)
             elCell.classList.add('boom')
+
         }
 
     }
@@ -208,38 +221,31 @@ function checkGameOver() {
     if (isLoose(gBoard)) {
         gGame.isGameOver = true
         showAllMines(gBoard)
-        renderLives(0)
-
+        renderLives(1, LIVE_BREAK)
+        clearInterval(gIntervalTimer)
     } else if (isWin(gBoard)) {
         gGame.isGameOver = true
         renderSmiley(WIN_SMILEY)
+        clearInterval(gIntervalTimer)
     }
 }
-function onSetBeginner() {
-    gLevel.size = 4
-    gLevel.mines = 2
-    onInitGame()
-}
 
-function onSetMedium() {
-    gLevel.size = 8
-    gLevel.mines = 14
-    onInitGame()
-}
-
-function onSetExpert() {
-    gLevel.size = 12
-    gLevel.mines = 32
-    onInitGame()
-}
 
 function renderSmiley(smiley) {
     gSmiley = document.querySelector('.smiley')
     gSmiley.innerHTML = smiley
 }
 
-function renderLives(count) {
+function renderLives(count, heart) {
     const elLive = document.querySelector('.lives')
-    elLive.innerHTML = LIVE.repeat(count)
-    return LIVE.repeat(count)
+    elLive.innerHTML = heart.repeat(count)
+    return heart.repeat(count)
 }
+
+function resetTimer() {
+    gIntervalTimer = 0
+    gStartTime = 0
+    const elSeconds = document.querySelector('.seconds span')
+    elSeconds.innerHTML = 0
+}
+
