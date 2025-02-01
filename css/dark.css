@@ -17,7 +17,7 @@ h2 {
 
 
 .game {
-    background-color: darkolivegreen;
+    background-color: BLACK;
     padding: 5px;
     width: 600px;
     height: 800px;
@@ -166,4 +166,10 @@ img {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.scoreboard {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
 }
