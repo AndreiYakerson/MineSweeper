@@ -186,6 +186,8 @@ function onCellMarked(elCell, ev) {
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
+    if (!currCell.isMine) return
+
     if (!currCell.isMarked && currCell.isCovered) {
         currCell.isMarked = true
 
