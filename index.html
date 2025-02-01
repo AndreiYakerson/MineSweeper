@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 
@@ -13,11 +14,12 @@
     
     <div class="game">
         <h1>Minesweeper</h1>
-
+        
         <div class="levels">
             <button class="btn" onclick="onSetBeginner(this)">Beginner</button>
             <button class="btn" onclick="onSetMedium(this)">Medium</button>
             <button class="btn" onclick="onSetExpert(this)">Expert</button>
+            <button class="btn dark-btn" onclick="darkMode(this)">Dark Mode</button>
         </div>
         
         <div class="counts-container">
@@ -29,9 +31,7 @@
         <div class="lives-container">
             <p class="lives"></p>
             <div class="bulbs">
-                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
-                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
-                <img src="img/bulbOff.png" onclick="onBulbClick(this)">
+
             </div>
         </div>
         

@@ -1,14 +1,16 @@
 body {
     text-align: center;
-    background-color: rgb(55, 182, 228)
+    background-color: black;
 }
 
 h1 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: lightcoral;
 }
 
 h2 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: lightcoral;
 }
 
 .dark-btn {
@@ -16,7 +18,7 @@ h2 {
 }
 
 .game {
-    background-color: bisque;
+    background-color: black;
     padding: 5px;
     width: 600px;
     height: 620px;
@@ -28,6 +30,7 @@ h2 {
 
 table {
     border: solid;
+    border-color: lightcoral;
     padding: 3px;
     margin: auto;
     cursor: pointer;
@@ -38,9 +41,9 @@ td {
     width: 23px;
     height: 23px;
     border: solid;
-    border-color: black;
+    border-color: lightcoral;
     border-radius: 5px;
-    color: blue;
+    color: white;
 }
 
 td:not(hover) {
@@ -48,19 +51,20 @@ td:not(hover) {
 }
 
 .covered:hover {
-    background-color: lightgreen;
+    background-color: blue;
     scale: 1.2;
     transition: 0.3s;
 }
 
 .covered {
     border: solid;
-    border-color: black;
-    background-color: yellow;
+    border-color: lightcoral;
+    background-color: darkblue;
 }
 
 .smiley {
-    background-color: lightgreen;
+    background-color: darkblue;
+    border-color: lightcoral;
     width: 40px;
     height: 40px;
     margin-bottom: 10px;
@@ -73,7 +77,7 @@ td:not(hover) {
 .smiley:hover {
     scale: 1.1;
     border-radius: 50%;
-    background-color: beige;
+    background-color: blue;
     transition: 0.5s;
 }
 
@@ -82,7 +86,7 @@ td:not(hover) {
 }
 
 .boom {
-    background-color: rgb(255, 0, 0);
+    background-color: orange;
 }
 
 .levels {
@@ -95,7 +99,8 @@ td:not(hover) {
 
 .btn {
     padding: 5px;
-    background-color: lightgreen;
+    background-color: darkblue;
+    color: lightcoral;
     border-radius: 10px;
     border-color: black;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -105,7 +110,7 @@ td:not(hover) {
     scale: 1.1;
     transition: 0.5s;
     cursor: pointer;
-    background-color: beige;
+    background-color: blue;
 }
 
 .btn:not(hover) {
@@ -114,7 +119,8 @@ td:not(hover) {
 
 .counts {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: beige;
+    background-color: darkblue;
+    color: lightcoral;
     width: 120px;
     height: 20px;
     border: solid;
@@ -132,7 +138,8 @@ td:not(hover) {
 }
 
 .lives-container {
-    background-color:  beige;
+    background-color: darkblue;
+    color: lightcoral;
     border: solid;
     border-radius: 20px;
     height: 60px;
@@ -143,6 +150,7 @@ td:not(hover) {
     width: 400px;
     margin-left: auto;
     margin-right: auto;
+
 }
 
 img {

@@ -18,6 +18,8 @@ var gBoard
 var gSmiley
 var gIntervalTimer
 var gStartTime
+var gElSelectedBulb
+var gIsDarkMode = false
 
 var gLevel = {
     size: 4,
@@ -45,6 +47,7 @@ function onInitGame() {
     // console.log(gBoard);
 
     renderLives(gGame.livesCount, LIVE)
+    renderBulbs(gGame.hintsCount)
     renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
@@ -108,18 +111,21 @@ function onClickCell(elCell) {
 
     //IN PROCESS
 
-    // if (gGame.isHintMode) {
-    //     showNegs(gBoard, cellLocation.i, cellLocation.j)
-    //     setTimeout(() => {
-    //         hideNegs(gBoard, cellLocation.i, cellLocation.j)
-    //     }, 1500)
-    // }
-    
+
 
     //PLACE THE MINES AFTER THE FIRST CLICK (FIRST CLICK IS SAFE)
     if (!gGame.firstCell) {
         gGame.firstCell = { i: cellLocation.i, j: cellLocation.j }
         setBoardElements(gLevel.size)
+    }
+
+    if (gGame.isHintMode) {
+        showNegs(gBoard, cellLocation.i, cellLocation.j)
+        setTimeout(() => {
+            hideNegs(gBoard, cellLocation.i, cellLocation.j)
+            gElSelectedBulb.style.display = 'none'
+        }, 1500)
+        return
     }
 
     const currCell = gBoard[cellLocation.i][cellLocation.j]
@@ -173,7 +179,7 @@ function onCellMarked(elCell, ev) {
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
     if (!currCell.isMarked && currCell.isCovered) {
-        gBoard[cellLocation.i][cellLocation.j].isMarked = true
+        currCell.isMarked = true
 
         if (gGame.minesCount !== 0) {
             gGame.minesCount--
@@ -230,13 +236,13 @@ function checkGameOver() {
     } else if (isWin(gBoard) && !gGame.isHintMode) {
         gGame.isGameOver = true
         renderSmiley(WIN_SMILEY)
-        clearInterval(gIntervalTimer)   
+        clearInterval(gIntervalTimer)
     }
 
 }
 
-
 function onBulbClick(el) {
+    gElSelectedBulb = el
     gGame.hintsCount--
     gGame.isHintMode = true
     el.src = 'img/bulbOn.png'
@@ -245,49 +251,74 @@ function onBulbClick(el) {
 
 //IN PROCESS
 
-// function showNegs(board, cellI, cellJ) {
-//     for (var i = cellI - 1; i <= cellI + 1; i++) {
-//         if (i < 0 || i >= gBoard.length) continue
-//         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-//             if (i === cellI && j === cellJ) continue
-//             if (j < 0 || j >= gBoard[i].length) continue
+function showNegs(board, cellI, cellJ) {
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (j < 0 || j >= gBoard[i].length) continue
 
-//             const currCell = board[i][j]
-//             var elCurrCell = document.getElementById(`${i},${j}`)
+            const currCell = board[i][j]
+            var elCurrCell = document.getElementById(`${i},${j}`)
 
-//             if (currCell.isCovered) {
-//                 currCell.isCovered = false
-//                 elCurrCell.classList.remove('covered')
+            if (currCell.isCovered) {
+                elCurrCell.classList.remove('covered')
 
-//                 if (currCell.minesAroundCount === 0) {
-//                     elCurrCell.innerHTML = EMPTY
-//                 } else {
-//                     elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
-//                 }
-//             }
+                if (currCell.isMine) {
+                    elCurrCell.innerHTML = MINE
+                } else if (currCell.minesAroundCount === 0) {
+                    elCurrCell.innerHTML = EMPTY
+                } else if (currCell.minesAroundCount > 0) {
+                    elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
+                }
+            }
 
-//         }
-//     }
-// }
+        }
+    }
+}
 
-// function hideNegs(board, cellI, cellJ) {
+function hideNegs(board, cellI, cellJ) {
 
-//     for (var i = cellI - 1; i <= cellI + 1; i++) {
-//         if (i < 0 || i >= gBoard.length) continue
-//         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-//             if (j < 0 || j >= gBoard[i].length) continue
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (j < 0 || j >= gBoard[i].length) continue
 
-//             const currCell = board[i][j]
-//             var elCurrCell = document.getElementById(`${i},${j}`)
+            const currCell = board[i][j]
+            var elCurrCell = document.getElementById(`${i},${j}`)
 
-//             if (!currCell.isCovered) {
-//                 currCell.isCovered = true
-//                 elCurrCell.classList.add('covered')
-//                 elCurrCell.innerHTML = EMPTY
-//             }
-//         }
+            if (currCell.isCovered) {
+                elCurrCell.classList.add('covered')
+                elCurrCell.innerHTML = EMPTY
+            }
 
-//     }
-//     gGame.isHintMode = false
-// }
+            if (currCell.isMarked) {
+                elCurrCell.innerHTML = FLAG
+            }
 
+        }
+        gGame.isHintMode = false
+    }
+}
+
+function renderBulbs(count) {
+    var elBulbs = document.querySelector('.bulbs')
+    var strHTML = ''
+    for (var i = 0; i < count; i++) {
+        strHTML += `<img src="img/bulbOff.png" onclick="onBulbClick(this)"></img>`
+    }
+    elBulbs.innerHTML = strHTML
+}
+
+function darkMode(el) {
+    var elCSS = document.querySelector('link') 
+
+    if (!gIsDarkMode) {
+        el.innerText = 'Dark mode On'
+        elCSS.href = 'css/dark.css'
+        gIsDarkMode = true
+    } else {
+        el.innerText = 'Dark mode Off'
+        elCSS.href = 'css/style.css'
+        gIsDarkMode = false
+    }
+}
