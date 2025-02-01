@@ -45,8 +45,8 @@ function onInitGame() {
         hintsCount: 3,
 
     }
-    
-    
+
+
     gBoard = createEmptyBoard(gLevel.size)
     // console.log(gBoard);
 
@@ -56,7 +56,7 @@ function onInitGame() {
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
     renderScoreboard()
-    
+
 }
 
 function setBoardElements(size) {
@@ -136,7 +136,8 @@ function onClickCell(elCell) {
     }
 
     const currCell = gBoard[cellLocation.i][cellLocation.j]
-    // console.log(gBoard);
+
+    if (currCell.isMarked) return
 
     if (!currCell.isMarked) {
         currCell.isCovered = false
@@ -186,17 +187,14 @@ function onCellMarked(elCell, ev) {
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
-    if (!currCell.isMine) return
+    if (!currCell.isCovered) return
 
     if (!currCell.isMarked && currCell.isCovered) {
         currCell.isMarked = true
-
-        if (gGame.minesCount !== 0) {
-            gGame.minesCount--
-            renderMinesCount(gGame.minesCount)
-        }
+        
+        gGame.minesCount--
+        renderMinesCount(gGame.minesCount)
         elCell.innerHTML = FLAG
-
     } else {
         gBoard[cellLocation.i][cellLocation.j].isMarked = false
         elCell.innerHTML = EMPTY
@@ -337,26 +335,26 @@ function darkMode(el) {
 
 function checkScoreboard(currLevel) {
     console.log(currLevel);
-    
+
     const currBegScore = +localStorage.getItem('beginner', gGame.secsPassed)
     const currMedScore = +localStorage.getItem('medium', gGame.secsPassed)
     const currExpScore = +localStorage.getItem('expert', gGame.secsPassed)
 
     if (currLevel === 'beginner' && currBegScore === 0) {
         localStorage.setItem('beginner', gGame.secsPassed)
-    } else if (currLevel === 'beginner' && currBegScore > gGame.secsPassed ) {
+    } else if (currLevel === 'beginner' && currBegScore > gGame.secsPassed) {
         localStorage.setItem('beginner', gGame.secsPassed)
     }
 
     if (currLevel === 'medium' && currMedScore === 0) {
         localStorage.setItem('medium', gGame.secsPassed)
-    } else if (currLevel === 'medium' && currMedScore > gGame.secsPassed ) {
+    } else if (currLevel === 'medium' && currMedScore > gGame.secsPassed) {
         localStorage.setItem('medium', gGame.secsPassed)
     }
 
     if (currLevel === 'expert' && currExpScore === 0) {
         localStorage.setItem('expert', gGame.secsPassed)
-    } else if (currLevel === 'expert' && currExpScore > gGame.secsPassed ) {
+    } else if (currLevel === 'expert' && currExpScore > gGame.secsPassed) {
         localStorage.setItem('expert', gGame.secsPassed)
     }
 }
@@ -365,7 +363,7 @@ function renderScoreboard() {
     const elBeginner = document.querySelector('.beginner span')
     const elMedium = document.querySelector('.medium span')
     const elExpert = document.querySelector('.expert span')
-    
+
 
     elBeginner.innerHTML = +localStorage.getItem('beginner')
     elMedium.innerHTML = +localStorage.getItem('medium')

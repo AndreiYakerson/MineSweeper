@@ -77,6 +77,7 @@ function isWin(board) {
             const currCell = board[i][j]
 
             if (currCell.isCovered && !currCell.isMine && !currCell.isMarked) return false
+            if (currCell.isCovered && !currCell.isMine && currCell.isMarked) return false
             if (currCell.isMine && !currCell.isMarked) return false
         }
     }
