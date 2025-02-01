@@ -1,5 +1,6 @@
 'use strict'
 
+
 //GAME ELEMENTS
 const MINE = '💣'
 const FLAG = '🚩'
@@ -24,6 +25,7 @@ var gIsDarkMode = false
 var gLevel = {
     size: 4,
     mines: 2,
+    levelMode: 'beginner'
 }
 
 function onInitGame() {
@@ -41,8 +43,10 @@ function onInitGame() {
         minesCount: gLevel.mines,
         livesCount: 3,
         hintsCount: 3,
-    }
 
+    }
+    
+    
     gBoard = createEmptyBoard(gLevel.size)
     // console.log(gBoard);
 
@@ -51,6 +55,8 @@ function onInitGame() {
     renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
+    renderScoreboard()
+    
 }
 
 function setBoardElements(size) {
@@ -98,6 +104,7 @@ function renderBoard(board) {
 
 function onClickCell(elCell) {
     if (gGame.isGameOver) return
+
 
     //STARTS THE TIMER
     if (!gGame.isOn) {
@@ -174,6 +181,7 @@ function onCellMarked(elCell, ev) {
 
     if (!gGame.isOn) return
     if (gGame.isGameOver) return
+    if (gGame.isHintMode) return
 
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
@@ -237,6 +245,8 @@ function checkGameOver() {
         gGame.isGameOver = true
         renderSmiley(WIN_SMILEY)
         clearInterval(gIntervalTimer)
+        checkScoreboard(gLevel.levelMode)
+        renderScoreboard(gLevel.levelMode)
     }
 
 }
@@ -310,7 +320,7 @@ function renderBulbs(count) {
 }
 
 function darkMode(el) {
-    var elCSS = document.querySelector('link') 
+    var elCSS = document.querySelector('link')
 
     if (!gIsDarkMode) {
         el.innerText = 'Dark mode On'
@@ -322,3 +332,41 @@ function darkMode(el) {
         gIsDarkMode = false
     }
 }
+
+function checkScoreboard(currLevel) {
+    console.log(currLevel);
+    
+    const currBegScore = +localStorage.getItem('beginner', gGame.secsPassed)
+    const currMedScore = +localStorage.getItem('medium', gGame.secsPassed)
+    const currExpScore = +localStorage.getItem('expert', gGame.secsPassed)
+
+    if (currLevel === 'beginner' && currBegScore === 0) {
+        localStorage.setItem('beginner', gGame.secsPassed)
+    } else if (currLevel === 'beginner' && currBegScore > gGame.secsPassed ) {
+        localStorage.setItem('beginner', gGame.secsPassed)
+    }
+
+    if (currLevel === 'medium' && currMedScore === 0) {
+        localStorage.setItem('medium', gGame.secsPassed)
+    } else if (currLevel === 'medium' && currMedScore > gGame.secsPassed ) {
+        localStorage.setItem('medium', gGame.secsPassed)
+    }
+
+    if (currLevel === 'expert' && currExpScore === 0) {
+        localStorage.setItem('expert', gGame.secsPassed)
+    } else if (currLevel === 'expert' && currExpScore > gGame.secsPassed ) {
+        localStorage.setItem('expert', gGame.secsPassed)
+    }
+}
+
+function renderScoreboard() {
+    const elBeginner = document.querySelector('.beginner span')
+    const elMedium = document.querySelector('.medium span')
+    const elExpert = document.querySelector('.expert span')
+    
+
+    elBeginner.innerHTML = +localStorage.getItem('beginner')
+    elMedium.innerHTML = +localStorage.getItem('medium')
+    elExpert.innerHTML = +localStorage.getItem('expert')
+}
+

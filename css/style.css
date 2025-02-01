@@ -11,15 +11,13 @@ h2 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.dark-btn {
-    margin-bottom: 10px;
-}
+
 
 .game {
     background-color: bisque;
     padding: 5px;
     width: 600px;
-    height: 620px;
+    height: 800px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
@@ -89,6 +87,7 @@ td:not(hover) {
     display: flex;
     gap: 10px;
     justify-content: center;
+    align-items: center;
     margin-bottom: 10px;
     cursor: pointer;
 }
@@ -159,4 +158,10 @@ img {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.scoreboard {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
 }

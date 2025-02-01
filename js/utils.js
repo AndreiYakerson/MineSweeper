@@ -112,24 +112,28 @@ function renderMinesCount(num) {
 function onSetBeginner() {
     gLevel.size = 4
     gLevel.mines = 2
+    gLevel.levelMode = 'beginner'
     onInitGame()
 }
 
 function onSetMedium() {
     gLevel.size = 8
     gLevel.mines = 14
+    gLevel.levelMode = 'medium'
     onInitGame()
 }
 
 function onSetExpert() {
     gLevel.size = 12
     gLevel.mines = 32
+    gLevel.levelMode = 'expert'
     onInitGame()
 }
 
 function renderTime() {
     const secDiff = Math.floor((Date.now() - gStartTime) / 1000)
     const elSeconds = document.querySelector('.seconds span')
+    gGame.secsPassed = secDiff
     elSeconds.innerHTML = secDiff
 }
 
