@@ -90,7 +90,8 @@ function expandUncover(board, cellI, cellJ) {
 function runFirstCell(i, j) {
     if (!gGame.firstCell) {
         gGame.firstCell = { i: i, j: j }
-        setBoardElements(gLevel.size)
+        gBoard[i][j].isCovered = false
+        setBoardElements(gLevel.size,i,j)
     }
 }
 

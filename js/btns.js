@@ -1,6 +1,8 @@
 'use strict'
 
 function onBulbClick(el) {
+    if (gIsBulbOn) return
+    gIsBulbOn = true
     gElSelectedBulb = el
     gGame.hintsCount--
     gGame.isHintMode = true

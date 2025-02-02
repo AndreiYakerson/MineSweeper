@@ -28,7 +28,7 @@ function showNegs(board, cellI, cellJ) {
             const currCell = board[i][j]
             var elCurrCell = document.getElementById(`${i},${j}`)
 
-            if (currCell.isCovered) {
+            if (currCell.isCovered || cellI === gGame.firstCell.i && cellJ === gGame.firstCell.j ) {
                 elCurrCell.classList.remove('covered')
 
                 if (currCell.isMine) {
@@ -54,7 +54,7 @@ function hideNegs(board, cellI, cellJ) {
             const currCell = board[i][j]
             var elCurrCell = document.getElementById(`${i},${j}`)
 
-            if (currCell.isCovered) {
+            if (currCell.isCovered || cellI === gGame.firstCell.i && cellJ === gGame.firstCell.j) {
                 elCurrCell.classList.add('covered')
                 elCurrCell.innerHTML = EMPTY
             }
@@ -65,6 +65,7 @@ function hideNegs(board, cellI, cellJ) {
 
         }
         gGame.isHintMode = false
+        gIsBulbOn = false
     }
 }
 

@@ -19,7 +19,9 @@ var gSmiley
 var gIntervalTimer
 var gStartTime
 var gElSelectedBulb
+var gIsBulbOn = false
 var gIsDarkMode = false
+
 
 var gLevel = {
     size: 4,
@@ -55,7 +57,7 @@ function onInitGame() {
     renderScoreboard()
 }
 
-function setBoardElements(size) {
+function setBoardElements(size,cellI,cellJ) {
     //set cell properties
     var board = []
 
@@ -69,7 +71,9 @@ function setBoardElements(size) {
                 isMine: false,
                 isMarked: false,
             }
+            if (cellI === i && cellJ === j) board[i][j].isCovered = false
         }
+        
     }
     //update board without mines
     gBoard = board
