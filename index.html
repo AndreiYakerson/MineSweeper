@@ -9,17 +9,16 @@
 
 </head>
 
-
 <body onload="onInitGame()">
     
     <div class="game">
         <h1>Minesweeper</h1>
         
+        <button class="btn dark-btn" onclick="onDarkMode(this)">Dark Mode</button>
         <div class="levels">
             <button class="btn" onclick="onSetBeginner(this)">Beginner</button>
             <button class="btn" onclick="onSetMedium(this)">Medium</button>
             <button class="btn" onclick="onSetExpert(this)">Expert</button>
-            <button class="btn dark-btn" onclick="darkMode(this)">Dark Mode</button>
         </div>
         
         <div class="counts-container">
@@ -51,7 +50,9 @@
     <h2>Andrei Yakerson</h2>
 
     <script src="js/main.js"></script>
-    <script src="js/utils.js"></script>
+    <script src="js/secondary.js"></script>
+    <script src="js/btns.js"></script>
+    <script src="js/render.js"></script>
 </body>
 
 </html>

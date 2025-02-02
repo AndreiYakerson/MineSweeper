@@ -1,6 +1,5 @@
 'use strict'
 
-
 //GAME ELEMENTS
 const MINE = '💣'
 const FLAG = '🚩'
@@ -46,9 +45,7 @@ function onInitGame() {
 
     }
 
-
     gBoard = createEmptyBoard(gLevel.size)
-    // console.log(gBoard);
 
     renderLives(gGame.livesCount, LIVE)
     renderBulbs(gGame.hintsCount)
@@ -56,7 +53,6 @@ function onInitGame() {
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
     renderScoreboard()
-
 }
 
 function setBoardElements(size) {
@@ -83,91 +79,33 @@ function setBoardElements(size) {
     updateMinesAroundCount()
 }
 
-function renderBoard(board) {
-    var strHTML = ''
-
-    for (var i = 0; i < board.length; i++) {
-        strHTML += `<tr>`
-
-        for (var j = 0; j < board.length; j++) {
-            strHTML += `<td id="${i},${j}" data-location="${i},${j}"
-             class="covered"
-              oncontextmenu="onCellMarked(this,event)"
-                 onclick="onClickCell(this)"></td>`
-        }
-        strHTML += `</tr>`
-    }
-
-    const elBoard = document.querySelector('.board')
-    elBoard.innerHTML = strHTML
-}
-
 function onClickCell(elCell) {
+    const cellLocation = getLocationFromData(elCell.dataset.location)
+    const currCell = gBoard[cellLocation.i][cellLocation.j]
+
     if (gGame.isGameOver) return
+    if (currCell.isMarked) return
 
-
-    //STARTS THE TIMER
-    if (!gGame.isOn) {
-        gStartTime = Date.now()
-        gIntervalTimer = setInterval(renderTime, 100)
-    }
-
+    timerStart()
+    
     gGame.isOn = true
 
-    const cellLocation = getLocationFromData(elCell.dataset.location)
-
-    //IN PROCESS
-
-
-
     //PLACE THE MINES AFTER THE FIRST CLICK (FIRST CLICK IS SAFE)
-    if (!gGame.firstCell) {
-        gGame.firstCell = { i: cellLocation.i, j: cellLocation.j }
-        setBoardElements(gLevel.size)
-    }
-
+    runFirstCell(cellLocation.i, cellLocation.j)
+    
     if (gGame.isHintMode) {
-        showNegs(gBoard, cellLocation.i, cellLocation.j)
-        setTimeout(() => {
-            hideNegs(gBoard, cellLocation.i, cellLocation.j)
-            gElSelectedBulb.style.display = 'none'
-        }, 1500)
+        runHintMode(cellLocation.i, cellLocation.j)
         return
     }
 
-    const currCell = gBoard[cellLocation.i][cellLocation.j]
-
-    if (currCell.isMarked) return
-
-    if (!currCell.isMarked) {
-        currCell.isCovered = false
-        elCell.classList.remove('covered')
-
-        if (currCell.minesAroundCount === 0) elCell.innerHTML = EMPTY
-        else elCell.innerHTML = gBoard[cellLocation.i][cellLocation.j].minesAroundCount
-    }
+    if (!currCell.isMarked) openCell(currCell,elCell,cellLocation.i,cellLocation.j)
 
     if (currCell.isMine && !currCell.isMarked) {
         //CHECKS LIVES COUNT AND HINT MODE
         if (gGame.livesCount > 1 && !gGame.isHintMode) {
-            gGame.livesCount--
-
-            elCell.classList.remove('covered')
-            elCell.innerHTML = MINE
-            gGame.isGameOver = true
-
-            setTimeout(() => {
-                currCell.isCovered = true
-                elCell.classList.add('covered')
-                elCell.innerHTML = EMPTY
-
-                renderLives(gGame.livesCount, LIVE)
-                gGame.isGameOver = false
-            }, 1000)
+            clickOnMine(currCell,elCell)
             return
-
         } else {
-            renderSmiley(LOOSE_SMILEY)
             elCell.classList.add('boom')
         }
 
@@ -180,68 +118,45 @@ function onCellMarked(elCell, ev) {
     //PREVENT MENU CONTEXT WHILE LEFT CLICKING ON THE BOARD
     ev.preventDefault()
 
-    if (!gGame.isOn) return
-    if (gGame.isGameOver) return
-    if (gGame.isHintMode) return
-
     const cellLocation = getLocationFromData(elCell.dataset.location)
     const currCell = gBoard[cellLocation.i][cellLocation.j]
 
+    if (!gGame.isOn) return
+    if (gGame.isGameOver) return
+    if (gGame.isHintMode) return
     if (!currCell.isCovered) return
 
     if (!currCell.isMarked && currCell.isCovered) {
         currCell.isMarked = true
-        
+
         gGame.minesCount--
         renderMinesCount(gGame.minesCount)
         elCell.innerHTML = FLAG
     } else {
         gBoard[cellLocation.i][cellLocation.j].isMarked = false
         elCell.innerHTML = EMPTY
+        gGame.minesCount++
+        renderMinesCount(gGame.minesCount)
     }
 
     checkGameOver()
 }
 
-
-
-function expandUncover(board, cellI, cellJ) {
-
-    if (gBoard[cellI][cellJ].minesAroundCount !== 0) return
-
-    for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (i === cellI && j === cellJ) continue
-            if (j < 0 || j >= gBoard[i].length) continue
-
-            const currCell = board[i][j]
-            var elCurrCell = document.getElementById(`${i},${j}`)
-
-            if (currCell.isCovered && !currCell.isMine) {
-                currCell.isCovered = false
-                elCurrCell.classList.remove('covered')
-
-                if (currCell.minesAroundCount === 0) {
-                    elCurrCell.innerHTML = EMPTY
-                    expandUncover(board, i, j)
-                } else {
-                    elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
-                }
-            }
-
-        }
-    }
-}
-
 function checkGameOver() {
 
     if (isLoose(gBoard) && !gGame.isHintMode) {
+        const loseSound = new Audio('audio/loseSound.mp3')
+        loseSound.play()
+        
         gGame.isGameOver = true
         showAllMines(gBoard)
         renderLives(1, LIVE_BREAK)
         clearInterval(gIntervalTimer)
+        renderSmiley(LOOSE_SMILEY)
     } else if (isWin(gBoard) && !gGame.isHintMode) {
+        const winSound = new Audio('audio/winSound.mp3')
+        winSound.play()
+
         gGame.isGameOver = true
         renderSmiley(WIN_SMILEY)
         clearInterval(gIntervalTimer)
@@ -251,90 +166,30 @@ function checkGameOver() {
 
 }
 
-function onBulbClick(el) {
-    gElSelectedBulb = el
-    gGame.hintsCount--
-    gGame.isHintMode = true
-    el.src = 'img/bulbOn.png'
-}
-
-
-//IN PROCESS
-
-function showNegs(board, cellI, cellJ) {
-    for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (j < 0 || j >= gBoard[i].length) continue
-
+function isLoose(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
             const currCell = board[i][j]
-            var elCurrCell = document.getElementById(`${i},${j}`)
-
-            if (currCell.isCovered) {
-                elCurrCell.classList.remove('covered')
-
-                if (currCell.isMine) {
-                    elCurrCell.innerHTML = MINE
-                } else if (currCell.minesAroundCount === 0) {
-                    elCurrCell.innerHTML = EMPTY
-                } else if (currCell.minesAroundCount > 0) {
-                    elCurrCell.innerHTML = gBoard[i][j].minesAroundCount
-                }
-            }
-
+            if (!currCell.isCovered && currCell.isMine) return true
         }
     }
+    return false
 }
 
-function hideNegs(board, cellI, cellJ) {
-
-    for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (j < 0 || j >= gBoard[i].length) continue
-
+function isWin(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
             const currCell = board[i][j]
-            var elCurrCell = document.getElementById(`${i},${j}`)
 
-            if (currCell.isCovered) {
-                elCurrCell.classList.add('covered')
-                elCurrCell.innerHTML = EMPTY
-            }
-
-            if (currCell.isMarked) {
-                elCurrCell.innerHTML = FLAG
-            }
-
+            if (currCell.isCovered && !currCell.isMine && !currCell.isMarked) return false
+            if (currCell.isCovered && !currCell.isMine && currCell.isMarked) return false
+            if (currCell.isMine && !currCell.isMarked) return false
         }
-        gGame.isHintMode = false
     }
-}
-
-function renderBulbs(count) {
-    var elBulbs = document.querySelector('.bulbs')
-    var strHTML = ''
-    for (var i = 0; i < count; i++) {
-        strHTML += `<img src="img/bulbOff.png" onclick="onBulbClick(this)"></img>`
-    }
-    elBulbs.innerHTML = strHTML
-}
-
-function darkMode(el) {
-    var elCSS = document.querySelector('link')
-
-    if (!gIsDarkMode) {
-        el.innerText = 'Dark mode On'
-        elCSS.href = 'css/dark.css'
-        gIsDarkMode = true
-    } else {
-        el.innerText = 'Dark mode Off'
-        elCSS.href = 'css/style.css'
-        gIsDarkMode = false
-    }
+    return true
 }
 
 function checkScoreboard(currLevel) {
-    console.log(currLevel);
 
     const currBegScore = +localStorage.getItem('beginner', gGame.secsPassed)
     const currMedScore = +localStorage.getItem('medium', gGame.secsPassed)
@@ -359,14 +214,23 @@ function checkScoreboard(currLevel) {
     }
 }
 
-function renderScoreboard() {
-    const elBeginner = document.querySelector('.beginner span')
-    const elMedium = document.querySelector('.medium span')
-    const elExpert = document.querySelector('.expert span')
-
-
-    elBeginner.innerHTML = +localStorage.getItem('beginner')
-    elMedium.innerHTML = +localStorage.getItem('medium')
-    elExpert.innerHTML = +localStorage.getItem('expert')
+function clickOnMine(currCell,elCell) {
+    const wrongSound = new Audio('audio/wrongSound.mp3')
+    wrongSound.play()
+    
+    gGame.livesCount--
+    
+    elCell.classList.remove('covered')
+    elCell.innerHTML = MINE
+    gGame.isGameOver = true
+    
+    setTimeout(() => {
+        currCell.isCovered = true
+        elCell.classList.add('covered')
+        elCell.innerHTML = EMPTY
+    
+        renderLives(gGame.livesCount, LIVE)
+        gGame.isGameOver = false
+    }, 1000)
 }
 
