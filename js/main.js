@@ -19,7 +19,7 @@ var gSmiley
 var gIntervalTimer
 var gStartTime
 var gElSelectedBulb
-var gIsBulbOn = false
+var gIsBulbOn
 var gIsDarkMode = false
 
 
@@ -32,6 +32,8 @@ var gLevel = {
 function onInitGame() {
     clearInterval(gIntervalTimer)
     resetTimer()
+
+    gIsBulbOn = false
 
     gGame = {
         isOn: false,
