@@ -87,7 +87,7 @@ function expandUncover(board, cellI, cellJ) {
     }
 }
 
-function runFirstCell(i, j) {
+function runFirstCell(i, j,elCell) {
     if (!gGame.firstCell) {
         gGame.firstCell = { i: i, j: j }
         gBoard[i][j].isCovered = false
@@ -121,7 +121,7 @@ function openCell(currCell,elCell,i,j) {
     currCell.isCovered = false
     elCell.classList.remove('covered')
     
-    if (currCell.minesAroundCount === 0) elCell.innerHTML = EMPTY
+    if (gBoard[i][j].minesAroundCount === 0) elCell.innerHTML = EMPTY
     else elCell.innerHTML = gBoard[i][j].minesAroundCount
 }
 
@@ -129,6 +129,7 @@ function getLocationFromData(str) {
     var arr = str.split(',')
     return { i: +arr[0], j: +arr[1] }
 }
+
 function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);

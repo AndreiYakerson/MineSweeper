@@ -72,6 +72,7 @@ function setBoardElements(size,cellI,cellJ) {
                 isMarked: false,
             }
             if (cellI === i && cellJ === j) board[i][j].isCovered = false
+            if (cellI === i && cellJ === j) board[i][j].isCovered = false
         }
         
     }
@@ -93,16 +94,18 @@ function onClickCell(elCell) {
     timerStart()
     
     gGame.isOn = true
-
+    
+    
     //PLACE THE MINES AFTER THE FIRST CLICK (FIRST CLICK IS SAFE)
-    runFirstCell(cellLocation.i, cellLocation.j)
+    runFirstCell(cellLocation.i, cellLocation.j,elCell)
+
     
     if (gGame.isHintMode) {
         runHintMode(cellLocation.i, cellLocation.j)
         return
     }
-
     if (!currCell.isMarked) openCell(currCell,elCell,cellLocation.i,cellLocation.j)
+
 
     if (currCell.isMine && !currCell.isMarked) {
         //CHECKS LIVES COUNT AND HINT MODE
@@ -114,6 +117,7 @@ function onClickCell(elCell) {
         }
 
     }
+    
     expandUncover(gBoard, cellLocation.i, cellLocation.j)
     checkGameOver()
 }
