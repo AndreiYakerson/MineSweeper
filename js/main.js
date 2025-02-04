@@ -141,16 +141,14 @@ function onCellMarked(elCell, ev) {
 
     if (!currCell.isMarked && currCell.isCovered) {
         currCell.isMarked = true
-
         gGame.minesCount--
-        renderMinesCount(gGame.minesCount)
         elCell.innerHTML = FLAG
     } else {
-        gBoard[cellLocation.i][cellLocation.j].isMarked = false
+        currCell.isMarked = false
         elCell.innerHTML = EMPTY
         gGame.minesCount++
-        renderMinesCount(gGame.minesCount)
     }
+    renderMinesCount(gGame.minesCount)
 
     checkGameOver()
 }

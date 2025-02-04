@@ -47,11 +47,11 @@ function getAllSafetyCells(board) {
     var idxs = []
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
-            const currLocation = { i: i, j: j }
+            // const currLocation = { i: i, j: j }
+            const cell = board[i][j]
 
-
-            if (!board[i][j].isCovered || board[i][j].isMarked) continue
-            if (!board[i][j].isMine) idxs.push({ i, j })
+            if (!cell.isCovered || cell.isMarked) continue
+            if (!cell.isMine) idxs.push({ i, j })
         }
     }
     if (!idxs[0]) return null
