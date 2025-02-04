@@ -17,7 +17,7 @@ h2 {
     background-color: BLACK;
     padding: 5px;
     width: 600px;
-    height: 770px;
+    height: 800px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
@@ -142,11 +142,10 @@ td:not(hover) {
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
-    gap: 150px;
+    gap: 100px;
     width: 400px;
     margin-left: auto;
     margin-right: auto;
-
 }
 
 img {
@@ -173,4 +172,12 @@ img {
 
 .dark-btn {
     margin-bottom: 10px;
+}
+
+.safe-btn {
+    margin-bottom: 10px;
+}
+
+.marked-safe {
+    background-color: yellow;
 }

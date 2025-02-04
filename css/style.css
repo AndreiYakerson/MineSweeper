@@ -15,7 +15,7 @@ h2 {
     background-color: bisque;
     padding: 5px;
     width: 600px;
-    height: 770px;
+    height: 800px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
@@ -130,14 +130,14 @@ td:not(hover) {
 
 .lives-container {
     text-align: center;
-    background-color:  beige;
+    background-color: beige;
     border: solid;
     border-radius: 20px;
     height: 60px;
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
-    gap: 200px;
+    gap: 60px;
     width: 400px;
     margin-left: auto;
     margin-right: auto;
@@ -149,6 +149,10 @@ img {
 }
 
 .lives {
+    font-size: 20px;
+}
+
+.safes {
     font-size: 20px;
 }
 
@@ -167,4 +171,12 @@ img {
 
 .dark-btn {
     margin-bottom: 10px;
+}
+
+.safe-btn {
+    margin-bottom: 10px;
+}
+
+.marked-safe {
+    background-color: blue;
 }

@@ -4,6 +4,7 @@
 const MINE = '💣'
 const FLAG = '🚩'
 const LIVE = '💙'
+const SAFE = '🛟'
 const LIVE_BREAK = '💔'
 const EMPTY = ' '
 
@@ -46,6 +47,7 @@ function onInitGame() {
         minesCount: gLevel.mines,
         livesCount: 3,
         hintsCount: 3,
+        safeCount: 3
 
     }
 
@@ -53,13 +55,14 @@ function onInitGame() {
 
     renderLives(gGame.livesCount, LIVE)
     renderBulbs(gGame.hintsCount)
+    renderSafes(gGame.safeCount, SAFE)
     renderSmiley(ALIVE_SMILEY)
     renderBoard(gBoard)
     renderMinesCount(gLevel.mines)
     renderScoreboard()
 }
 
-function setBoardElements(size,cellI,cellJ) {
+function setBoardElements(size, cellI, cellJ) {
     //set cell properties
     var board = []
 
@@ -76,7 +79,7 @@ function setBoardElements(size,cellI,cellJ) {
             if (cellI === i && cellJ === j) board[i][j].isCovered = false
             if (cellI === i && cellJ === j) board[i][j].isCovered = false
         }
-        
+
     }
     //update board without mines
     gBoard = board
@@ -94,32 +97,32 @@ function onClickCell(elCell) {
     if (currCell.isMarked) return
 
     timerStart()
-    
-    gGame.isOn = true
-    
-    
-    //PLACE THE MINES AFTER THE FIRST CLICK (FIRST CLICK IS SAFE)
-    runFirstCell(cellLocation.i, cellLocation.j,elCell)
 
-    
+    gGame.isOn = true
+
+
+    //PLACE THE MINES AFTER THE FIRST CLICK (FIRST CLICK IS SAFE)
+    runFirstCell(cellLocation.i, cellLocation.j, elCell)
+
+
     if (gGame.isHintMode) {
         runHintMode(cellLocation.i, cellLocation.j)
         return
     }
-    if (!currCell.isMarked) openCell(currCell,elCell,cellLocation.i,cellLocation.j)
+    if (!currCell.isMarked) openCell(currCell, elCell, cellLocation.i, cellLocation.j)
 
 
     if (currCell.isMine && !currCell.isMarked) {
         //CHECKS LIVES COUNT AND HINT MODE
         if (gGame.livesCount > 1 && !gGame.isHintMode) {
-            clickOnMine(currCell,elCell)
+            clickOnMine(currCell, elCell)
             return
         } else {
             elCell.classList.add('boom')
         }
 
     }
-    
+
     expandUncover(gBoard, cellLocation.i, cellLocation.j)
     checkGameOver()
 }
@@ -157,7 +160,7 @@ function checkGameOver() {
     if (isLoose(gBoard) && !gGame.isHintMode) {
         const loseSound = new Audio('audio/loseSound.mp3')
         loseSound.play()
-        
+
         gGame.isGameOver = true
         showAllMines(gBoard)
         renderLives(1, LIVE_BREAK)
@@ -224,23 +227,25 @@ function checkScoreboard(currLevel) {
     }
 }
 
-function clickOnMine(currCell,elCell) {
+function clickOnMine(currCell, elCell) {
     const wrongSound = new Audio('audio/wrongSound.mp3')
     wrongSound.play()
-    
+
     gGame.livesCount--
-    
+
     elCell.classList.remove('covered')
     elCell.innerHTML = MINE
     gGame.isGameOver = true
-    
+
     setTimeout(() => {
         currCell.isCovered = true
         elCell.classList.add('covered')
         elCell.innerHTML = EMPTY
-    
+
         renderLives(gGame.livesCount, LIVE)
         gGame.isGameOver = false
     }, 1000)
 }
+
+
 

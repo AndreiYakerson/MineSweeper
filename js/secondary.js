@@ -43,6 +43,21 @@ function getAllEmptyIdxs(board) {
     return idxs
 }
 
+function getAllSafetyCells(board) {
+    var idxs = []
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            const currLocation = { i: i, j: j }
+
+
+            if (!board[i][j].isCovered || board[i][j].isMarked) continue
+            if (!board[i][j].isMine) idxs.push({ i, j })
+        }
+    }
+    if (!idxs[0]) return null
+    return idxs
+}
+
 function getNegsMinesCount(cellI, cellJ) { 
     var minesCount = 0
 
@@ -120,6 +135,7 @@ function runHintMode(i,j) {
 function openCell(currCell,elCell,i,j) {
     currCell.isCovered = false
     elCell.classList.remove('covered')
+    elCell.classList.remove('marked-safe')
     
     if (gBoard[i][j].minesAroundCount === 0) elCell.innerHTML = EMPTY
     else elCell.innerHTML = gBoard[i][j].minesAroundCount

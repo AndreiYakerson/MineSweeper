@@ -43,3 +43,17 @@ function onSetExpert() {
     gLevel.levelMode = 'expert'
     onInitGame()
 }
+
+function onSafeClick() {
+    const idxs = getAllSafetyCells(gBoard)
+
+    if (gGame.safeCount === 0 || !gGame.isOn || !idxs) return
+
+    const randomNum = getRandomInt(0, idxs.length)
+    const randomIdx = idxs[randomNum]
+    
+    const elCell = document.getElementById(`${randomIdx.i},${randomIdx.j}`)
+    elCell.classList.add('marked-safe')
+    gGame.safeCount--
+    renderSafes(gGame.safeCount, SAFE)
+}

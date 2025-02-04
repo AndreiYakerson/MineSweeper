@@ -45,7 +45,6 @@ function showNegs(board, cellI, cellJ) {
 }
 
 function hideNegs(board, cellI, cellJ) {
-
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
@@ -97,6 +96,12 @@ function renderLives(count, heart) {
     const elLive = document.querySelector('.lives')
     elLive.innerHTML = heart.repeat(count)
     return heart.repeat(count)
+}
+
+function renderSafes(count, safe) {
+    const elLive = document.querySelector('.safes')
+    elLive.innerHTML = safe.repeat(count)
+    return safe.repeat(count)
 }
 
 function renderMinesCount(num) {
