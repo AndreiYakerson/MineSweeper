@@ -28,7 +28,7 @@ function showNegs(board, cellI, cellJ) {
             const currCell = board[i][j]
             var elCurrCell = document.getElementById(`${i},${j}`)
 
-            if (currCell.isCovered || cellI === gGame.firstCell.i && cellJ === gGame.firstCell.j ) {
+            if (currCell.isCovered || cellI === gGame.firstCell.i && cellJ === gGame.firstCell.j) {
                 elCurrCell.classList.remove('covered')
 
                 if (currCell.isMine) {
@@ -68,7 +68,7 @@ function hideNegs(board, cellI, cellJ) {
     }
 }
 
-function renderBoard(board) {
+function renderEmptyBoard(board) {
     var strHTML = ''
 
     for (var i = 0; i < board.length; i++) {
@@ -130,4 +130,30 @@ function showAllMines(board) {
             }
         }
     }
+}
+
+function renderBoard(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board.length; j++) {
+            const currCell = board[i][j]
+            const currElement = document.getElementById(`${i},${j}`)
+
+            if (currCell.isCovered || gGameHistory.length === 1) {
+                currCell.covered = true
+                currElement.classList.add('covered')
+                currElement.innerHTML = EMPTY
+            }
+
+            if (currCell.isMarked) {
+                currCell.isMarked = true
+                currElement.classList.add('covered')
+                currElement.innerHTML = FLAG
+                gGame.minesCount++
+                
+                renderMinesCount(gGame.minesCount)
+            }
+        }
+    }
+    
+
 }

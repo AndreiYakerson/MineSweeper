@@ -1,6 +1,9 @@
 body {
+    display: flex;
+    justify-content: center;
     text-align: center;
     background-color: rgb(55, 182, 228)
+    
 }
 
 h1, h2 {
@@ -9,26 +12,28 @@ h1, h2 {
 
 .game {
     background-color: bisque;
-    padding: 5px;
-    width: 600px;
-    height: 850px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 1rem;
+    width: 90vw;
+    height: 100%;
+    margin-inline: auto;
     border-radius: 10px;
     border: solid;
+    box-shadow: 15px 15px 29px 1px #060606;
 }
 
 table {
     border: solid;
-    padding: 3px;
+    padding: 1%;
     margin: auto;
     cursor: pointer;
     border-radius: 10px;
+    
 }
 
 td {
-    width: 23px;
-    height: 23px;
+    width: 4vw;
+    height: 4vw;
+    font-size: x-small;
     border: solid;
     border-color: black;
     border-radius: 5px;
@@ -108,7 +113,8 @@ td:not(hover) {
 .counts {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     background-color: beige;
-    width: 120px;
+    min-width: 100px;
+    flex-wrap: nowrap;
     height: 20px;
     border: solid;
     border-radius: 10px;
@@ -120,21 +126,25 @@ td:not(hover) {
 
 .counts-container {
     display: flex;
-    gap: 20px;
+    gap: 5%;
     justify-content: center;
 }
 
 .lives-container {
+    display: flex;
+    justify-content: center;
     text-align: center;
+
+    max-width: 400px;
+    min-width: 300px;
+
+
     background-color: beige;
     border: solid;
     border-radius: 20px;
     height: 60px;
     margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    width: 400px;
+    gap: 5%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -161,9 +171,12 @@ img {
 
 .scoreboard {
     display: flex;
-    gap: 60px;
+    gap: 5%;
     justify-content: center;
+    padding: 10px;
+    min-width: 20px;
 }
+
 
 .dark-btn {
     margin-bottom: 10px;

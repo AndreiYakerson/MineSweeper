@@ -15,6 +15,8 @@ const WIN_SMILEY = '😎'
 
 //GLOBAL VARS
 var gGame
+var gGameHistory = []
+var gPrevBoard = {}
 var gBoard
 var gSmiley
 var gIntervalTimer
@@ -52,14 +54,19 @@ function onInitGame() {
     }
 
     gBoard = createEmptyBoard(gLevel.size)
+    gGameHistory = [structuredClone(gBoard)]
+
+    
 
     renderLives(gGame.livesCount, LIVE)
     renderBulbs(gGame.hintsCount)
     renderSafes(gGame.safeCount, SAFE)
     renderSmiley(ALIVE_SMILEY)
-    renderBoard(gBoard)
+    renderEmptyBoard(gBoard)
     renderMinesCount(gLevel.mines)
     renderScoreboard()
+
+    // gGameHistory.push([gGame,gBoard])
 }
 
 function setBoardElements(size, cellI, cellJ) {
@@ -76,7 +83,6 @@ function setBoardElements(size, cellI, cellJ) {
                 isMine: false,
                 isMarked: false,
             }
-            if (cellI === i && cellJ === j) board[i][j].isCovered = false
             if (cellI === i && cellJ === j) board[i][j].isCovered = false
         }
 
@@ -124,7 +130,10 @@ function onClickCell(elCell) {
     }
 
     expandUncover(gBoard, cellLocation.i, cellLocation.j)
+
     checkGameOver()
+
+    gGameHistory.push(structuredClone(gBoard))    
 }
 
 function onCellMarked(elCell, ev) {
@@ -149,6 +158,8 @@ function onCellMarked(elCell, ev) {
         gGame.minesCount++
     }
     renderMinesCount(gGame.minesCount)
+
+    gGameHistory.push(structuredClone(gBoard))
 
     checkGameOver()
 }

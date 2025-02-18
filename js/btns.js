@@ -57,3 +57,15 @@ function onSafeClick() {
     gGame.safeCount--
     renderSafes(gGame.safeCount, SAFE)
 }
+
+function onUndoClick() {
+    gGameHistory.pop()
+
+    // gBoard = gGameHistory[gGameHistory.length - 1] //// NEED TO FIX
+    
+    renderBoard(gGameHistory[gGameHistory.length - 1])
+
+
+    
+
+}

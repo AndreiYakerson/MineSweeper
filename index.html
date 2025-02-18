@@ -27,7 +27,11 @@
             <p class="counts seconds">Seconds: <span></span></p>
         </div>
         
-        <button class="btn safe-btn" onclick="onSafeClick()">Safety cell</button>
+        <div class="help-container">
+            <button class="btn safe-btn" onclick="onSafeClick()">Safety cell</button>
+            <button class="btn undo-btn" onclick="onUndoClick()">Undo</button>
+        </div>
+
         <div class="lives-container">
             <p class="lives"></p>
             <p class="safes"></p>
@@ -41,7 +45,7 @@
             </tbody>
         </table>
 
-        <h2>Best score</h2>
+        <!-- <h2>Best score</h2> -->
         <div class="scoreboard">
             <p class="beginner counts">Beginner: <span></span></p>
             <p class="medium counts">Medium: <span></span></p>
@@ -49,7 +53,7 @@
         </div>
     </div>
 
-    <h2>Andrei Yakerson</h2>
+    <!-- <h2>Andrei Yakerson</h2> -->
 
     <script src="js/main.js"></script>
     <script src="js/secondary.js"></script>
